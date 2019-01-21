@@ -18,7 +18,7 @@ install:
   - lsb_release --id --short
   - lsb_release --codename --short
 
-  - sudo sh ./install-build-deps.sh --no-syms --no-prompt --no-arm
+  - sh ./install-build-deps.sh --no-arm --no-syms --no-prompt
 
   - DEPS_DIR="${TRAVIS_BUILD_DIR}/deps"
   - mkdir ${DEPS_DIR} && cd ${DEPS_DIR} && pwd
