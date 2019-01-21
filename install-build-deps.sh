@@ -325,6 +325,8 @@ if [ 1 -eq "${do_quick_check-0}" ] ; then
   exit 0
 fi
 
+echo "$packages"
+
 if test "$do_inst_lib32" = "1"; then
   if [[ ! $codename =~ (precise) ]]; then
     sudo dpkg --add-architecture i386
