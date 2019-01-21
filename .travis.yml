@@ -14,9 +14,7 @@ env:
   #- CMAKE_ARGS="-DCMAKE_BUILD_TYPE=Release -DCMAKE_VERBOSE_MAKEFILE=ON"
 
 install:
-  - pwd
-  - ls -la
-  - sudo ./install-build-deps.sh
+  - sudo ./install-build-deps.sh --no-syms --no-prompt
 
   - DEPS_DIR="${TRAVIS_BUILD_DIR}/deps"
   - mkdir ${DEPS_DIR} && cd ${DEPS_DIR} && pwd
