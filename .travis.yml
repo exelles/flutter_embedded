@@ -13,11 +13,9 @@ env:
   #- CMAKE_ARGS="-DCMAKE_BUILD_TYPE=Debug -DCMAKE_VERBOSE_MAKEFILE=ON"
   #- CMAKE_ARGS="-DCMAKE_BUILD_TYPE=Release -DCMAKE_VERBOSE_MAKEFILE=ON"
 
-before_install:
-  - cd ${TRAVIS_BUILD_DIR}
-  - sudo ./install-build-deps
-
 install:
+  - sudo ./install-build-deps.sh
+
   - DEPS_DIR="${TRAVIS_BUILD_DIR}/deps"
   - mkdir ${DEPS_DIR} && cd ${DEPS_DIR} && pwd
   - git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
@@ -34,5 +32,6 @@ before_script:
   - cd ${TRAVIS_BUILD_DIR}
   - mkdir build && cd build
   - cmake .. ${CMAKE_ARGS} -GNinja
+  
 script:
   - autoninja
