@@ -60,6 +60,7 @@ if(BUILD_HELLO_PI)
 
     # These are C apps...
     ExternalProject_Add(hello_pi
+        DOWNLOAD_COMMAND ""
         PATCH_COMMAND ${CMAKE_COMMAND} -E copy
             ${CMAKE_SOURCE_DIR}/cmake/hello_pi.cmake
             ${TARGET_SYSROOT}/opt/vc/src/hello_pi/CMakeLists.txt
