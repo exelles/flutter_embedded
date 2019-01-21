@@ -68,14 +68,14 @@ if(BUILD_TOOLCHAIN)
 
     set(LLVM_CHECKOUT
         cd ${CMAKE_BINARY_DIR} &&
-        svn co http://llvm.org/svn/llvm-project/llvm/trunk llvm &&
+        svn co -q http://llvm.org/svn/llvm-project/llvm/trunk llvm &&
         cd ${LLVM_SRC_DIR}/tools &&
-        svn co http://llvm.org/svn/llvm-project/cfe/trunk clang)
+        svn co -q http://llvm.org/svn/llvm-project/cfe/trunk clang)
 
     if(BUILD_LLDB)
         set(LLVM_CHECKOUT ${LLVM_CHECKOUT} &&
         cd ${LLVM_SRC_DIR}/tools &&
-        svn co http://llvm.org/svn/llvm-project/lldb/trunk lldb)
+        svn co -q http://llvm.org/svn/llvm-project/lldb/trunk lldb)
     else()
         set(LLVM_CHECKOUT ${LLVM_CHECKOUT} && 
             cd ${LLVM_SRC_DIR}/tools && rm -rf lldb)
@@ -84,7 +84,7 @@ if(BUILD_TOOLCHAIN)
     if(BUILD_COMPILER_RT)
         set(LLVM_CHECKOUT ${LLVM_CHECKOUT} &&
             cd ${LLVM_SRC_DIR}/projects &&
-            svn co http://llvm.org/svn/llvm-project/compiler-rt/trunk compiler-rt)
+            svn co -q http://llvm.org/svn/llvm-project/compiler-rt/trunk compiler-rt)
     else()
         set(LLVM_CHECKOUT ${LLVM_CHECKOUT} && 
             cd ${LLVM_SRC_DIR}/projects && rm -rf compiler-rt)
@@ -93,7 +93,7 @@ if(BUILD_TOOLCHAIN)
     if(BUILD_LIBUNWIND)
         set(LLVM_CHECKOUT ${LLVM_CHECKOUT} &&
             cd ${CMAKE_BINARY_DIR} &&
-            svn co http://llvm.org/svn/llvm-project/libunwind/trunk libunwind)
+            svn co -q http://llvm.org/svn/llvm-project/libunwind/trunk libunwind)
     else()
         set(LLVM_CHECKOUT ${LLVM_CHECKOUT} && 
             cd ${CMAKE_BINARY_DIR} && rm -rf libunwind)
@@ -102,7 +102,7 @@ if(BUILD_TOOLCHAIN)
     if(BUILD_LIBCXXABI)
         set(LLVM_CHECKOUT ${LLVM_CHECKOUT} && 
             cd ${LLVM_SRC_DIR}/projects &&
-            svn co http://llvm.org/svn/llvm-project/libcxxabi/trunk libcxxabi)
+            svn co -q http://llvm.org/svn/llvm-project/libcxxabi/trunk libcxxabi)
     else()
         set(LLVM_CHECKOUT ${LLVM_CHECKOUT} && 
             cd ${LLVM_SRC_DIR}/projects && rm -rf libcxxabi)
@@ -111,7 +111,7 @@ if(BUILD_TOOLCHAIN)
     if(BUILD_LIBCXX)
         set(LLVM_CHECKOUT ${LLVM_CHECKOUT} &&
             cd ${LLVM_SRC_DIR}/projects &&
-            svn co http://llvm.org/svn/llvm-project/libcxx/trunk libcxx)
+            svn co -q http://llvm.org/svn/llvm-project/libcxx/trunk libcxx)
     else()
         set(LLVM_CHECKOUT ${LLVM_CHECKOUT} && 
             cd ${LLVM_SRC_DIR}/projects && rm -rf libcxx)
