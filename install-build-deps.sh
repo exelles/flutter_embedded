@@ -68,7 +68,7 @@ codename=$(lsb_release --codename --short)
 ubuntu_codenames="(bionic|precise|trusty|utopic|vivid|xenial)"
 debian_codenames="(stretch|rodete)"
 if [ 0 -eq "${do_unsupported-0}" ] && [ 0 -eq "${do_quick_check-0}" ] ; then
-  if [ ! $codename =~ $ubuntu_codenames && ! $codename =~ $debian_codenames ]; then
+  if [[ ! $codename =~ $ubuntu_codenames && ! $codename =~ $debian_codenames ]]; then
     echo "ERROR: Only Ubuntu 12.04 (precise), 14.04 (trusty), " \
       "14.10 (utopic), 15.04 (vivid), and 16.04 (xenial), Debian " \
       "(rodete and stretch) are currently supported" >&2
@@ -200,7 +200,7 @@ fi
 # When cross building for arm/Android on 64-bit systems the host binaries
 # that are part of v8 need to be compiled with -m32 which means
 # that basic multilib support is needed.
-if [ "$(uname -m)" == "x86_64" ]; then
+if [[ "$(uname -m)" == "x86_64" ]]; then
   # gcc-multilib conflicts with the arm cross compiler (at least in trusty) but
   # g++-X.Y-multilib gives us the 32-bit support that we need. Find out the
   # appropriate value of X and Y by seeing what version the current
@@ -326,7 +326,7 @@ if [ 1 -eq "${do_quick_check-0}" ] ; then
 fi
 
 if test "$do_inst_lib32" = "1"; then
-  if [ ! $codename =~ (precise) ]; then
+  if [[ ! $codename =~ (precise) ]]; then
     sudo dpkg --add-architecture i386
   fi
 fi
