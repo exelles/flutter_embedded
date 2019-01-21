@@ -16,11 +16,11 @@ env:
 install:
   - pwd
   - ls -la
-  - sudo ./jwinarske/flutter_embedded/install-build-deps.sh
+  - sudo ./install-build-deps.sh
 
   - DEPS_DIR="${TRAVIS_BUILD_DIR}/deps"
   - mkdir ${DEPS_DIR} && cd ${DEPS_DIR} && pwd
-  
+
   - git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
   - export PATH=${DEPS_DIR}/depot_tools:$PATH
 
