@@ -7,7 +7,7 @@ compiler:
   - gcc
 
 env:
-  - CMAKE_ARGS=""
+  - CMAKE_ARGS="-DLLVM_TARGETS_TO_BUILD=ARM"
   #- CMAKE_ARGS="-DCMAKE_BUILD_TYPE=Debug -DCMAKE_VERBOSE_MAKEFILE=ON"
   #- CMAKE_ARGS="-DCMAKE_BUILD_TYPE=Release -DCMAKE_VERBOSE_MAKEFILE=ON"
 
@@ -34,5 +34,5 @@ before_script:
   - cmake .. ${CMAKE_ARGS}
 
 script:
-  # - autoninja  # causes build to fail, as it thinks build is non-responsive...
-  - make -j8
+  # - autoninja  # causes travis-ci build to fail, as it thinks it's non-responsive...
+  - make -j16
