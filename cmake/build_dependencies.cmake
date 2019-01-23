@@ -51,6 +51,10 @@ endif()
 
 if(BUILD_TOOLCHAIN)
 
+    if(NOT LLVM_VERSION)
+        set(LLVM_VERSION branches/release_80/) #tags/RELEASE_701/final/)
+    endif()
+
     set(LLVM_SRC_DIR ${CMAKE_BINARY_DIR}/llvm)
 
     if(NOT LLVM_TARGETS_TO_BUILD)
@@ -68,14 +72,14 @@ if(BUILD_TOOLCHAIN)
 
     set(LLVM_CHECKOUT
         cd ${CMAKE_BINARY_DIR} &&
-        svn co -q http://llvm.org/svn/llvm-project/llvm/trunk llvm &&
+        svn co -q http://llvm.org/svn/llvm-project/llvm/${LLVM_VERSION} llvm &&
         cd ${LLVM_SRC_DIR}/tools &&
-        svn co -q http://llvm.org/svn/llvm-project/cfe/trunk clang)
+        svn co -q http://llvm.org/svn/llvm-project/cfe/${LLVM_VERSION} clang)
 
     if(BUILD_LLDB)
         set(LLVM_CHECKOUT ${LLVM_CHECKOUT} &&
         cd ${LLVM_SRC_DIR}/tools &&
-        svn co -q http://llvm.org/svn/llvm-project/lldb/trunk lldb)
+        svn co -q http://llvm.org/svn/llvm-project/lldb/${LLVM_VERSION} lldb)
     else()
         set(LLVM_CHECKOUT ${LLVM_CHECKOUT} && 
             cd ${LLVM_SRC_DIR}/tools && rm -rf lldb)
@@ -84,7 +88,7 @@ if(BUILD_TOOLCHAIN)
     if(BUILD_COMPILER_RT)
         set(LLVM_CHECKOUT ${LLVM_CHECKOUT} &&
             cd ${LLVM_SRC_DIR}/projects &&
-            svn co -q http://llvm.org/svn/llvm-project/compiler-rt/trunk compiler-rt)
+            svn co -q http://llvm.org/svn/llvm-project/compiler-rt/${LLVM_VERSION} compiler-rt)
     else()
         set(LLVM_CHECKOUT ${LLVM_CHECKOUT} && 
             cd ${LLVM_SRC_DIR}/projects && rm -rf compiler-rt)
@@ -93,7 +97,7 @@ if(BUILD_TOOLCHAIN)
     if(BUILD_LIBUNWIND)
         set(LLVM_CHECKOUT ${LLVM_CHECKOUT} &&
             cd ${CMAKE_BINARY_DIR} &&
-            svn co -q http://llvm.org/svn/llvm-project/libunwind/trunk libunwind)
+            svn co -q http://llvm.org/svn/llvm-project/libunwind/${LLVM_VERSION} libunwind)
     else()
         set(LLVM_CHECKOUT ${LLVM_CHECKOUT} && 
             cd ${CMAKE_BINARY_DIR} && rm -rf libunwind)
@@ -102,7 +106,7 @@ if(BUILD_TOOLCHAIN)
     if(BUILD_LIBCXXABI)
         set(LLVM_CHECKOUT ${LLVM_CHECKOUT} && 
             cd ${LLVM_SRC_DIR}/projects &&
-            svn co -q http://llvm.org/svn/llvm-project/libcxxabi/trunk libcxxabi)
+            svn co -q http://llvm.org/svn/llvm-project/libcxxabi/${LLVM_VERSION} libcxxabi)
     else()
         set(LLVM_CHECKOUT ${LLVM_CHECKOUT} && 
             cd ${LLVM_SRC_DIR}/projects && rm -rf libcxxabi)
@@ -111,11 +115,12 @@ if(BUILD_TOOLCHAIN)
     if(BUILD_LIBCXX)
         set(LLVM_CHECKOUT ${LLVM_CHECKOUT} &&
             cd ${LLVM_SRC_DIR}/projects &&
-            svn co -q http://llvm.org/svn/llvm-project/libcxx/trunk libcxx)
+            svn co -q http://llvm.org/svn/llvm-project/libcxx/${LLVM_VERSION} libcxx)
     else()
-        set(LLVM_CHECKOUT ${LLVM_CHECKOUT} && 
+        set(LLVM_CHECKOUT ${LLVM_CHECKOUT} &&
             cd ${LLVM_SRC_DIR}/projects && rm -rf libcxx)
     endif()
+
 
     ExternalProject_Add(clang
         DOWNLOAD_COMMAND ${LLVM_CHECKOUT}
@@ -162,7 +167,7 @@ if(BUILD_TOOLCHAIN)
             UPDATE_COMMAND ""
             CONFIGURE_COMMAND ${CMAKE_COMMAND} ${LLVM_SRC_DIR}/projects/compiler-rt
                 -DCMAKE_TOOLCHAIN_FILE=${CMAKE_BINARY_DIR}/toolchain.cmake
-                -DCMAKE_INSTALL_PREFIX=${TOOLCHAIN_DIR}/lib/clang/9.0.0
+                -DCMAKE_INSTALL_PREFIX=${TOOLCHAIN_DIR}/lib/clang/8.0.0
                 -DCMAKE_BUILD_TYPE=MinSizeRel
                 -DCMAKE_VERBOSE_MAKEFILE=${CMAKE_VERBOSE_MAKEFILE}
                 -DLLVM_CONFIG_PATH=${LLVM_CONFIG_PATH}
@@ -355,29 +360,3 @@ endif()
 
 include_directories(${ENGINE_INCLUDE_DIR})
 link_directories(${ENGINE_LIBRARIES_DIR})
-
-
-option(BUILD_TSLIB "Checkout and build tslib for target" ON)
-if(BUILD_TSLIB AND NOT ANDROID)
-    ExternalProject_Add(tslib
-        GIT_REPOSITORY https://github.com/jwinarske/tslib.git
-        GIT_TAG cxx_link_fix
-        GIT_SHALLOW true
-        BUILD_IN_SOURCE 0
-        UPDATE_COMMAND ""
-        CMAKE_ARGS
-        -DCMAKE_TOOLCHAIN_FILE=${CMAKE_BINARY_DIR}/app.toolchain.cmake
-        -DCMAKE_INSTALL_PREFIX=${TARGET_SYSROOT}
-        -DCMAKE_BUILD_TYPE=MinSizeRel
-        -DCMAKE_VERBOSE_MAKEFILE=${CMAKE_VERBOSE_MAKEFILE}
-    )
-    if(BUILD_TOOLCHAIN)
-        add_dependencies(tslib clang)
-    endif()
-    if(BUILD_COMPILER_RT)
-        add_dependencies(tslib compiler-rt)
-    endif()
-    if(BUILD_SYSROOT)
-        add_dependencies(tslib sysroot)
-    endif()        
-endif()

@@ -88,6 +88,30 @@ if(BUILD_HELLO_PI)
 
 endif()
 
+option(BUILD_TSLIB "Checkout and build tslib for target" ON)
+if(BUILD_TSLIB)
+    ExternalProject_Add(tslib
+        GIT_REPOSITORY https://github.com/kergoth/tslib.git
+        GIT_TAG master
+        GIT_SHALLOW true
+        BUILD_IN_SOURCE 0
+        UPDATE_COMMAND ""
+        CMAKE_ARGS
+        -DCMAKE_TOOLCHAIN_FILE=${CMAKE_BINARY_DIR}/app.toolchain.cmake
+        -DCMAKE_INSTALL_PREFIX=${TARGET_SYSROOT}
+        -DCMAKE_BUILD_TYPE=MinSizeRel
+        -DCMAKE_VERBOSE_MAKEFILE=${CMAKE_VERBOSE_MAKEFILE}
+    )
+    if(BUILD_TOOLCHAIN)
+        add_dependencies(tslib clang)
+    endif()
+    if(BUILD_COMPILER_RT)
+        add_dependencies(tslib compiler-rt)
+    endif()
+    if(BUILD_SYSROOT)
+        add_dependencies(tslib sysroot)
+    endif()
+endif()
 
 #
 # build flutter executable
